@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Raven QR</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="home_label">QR Files</string>
+    <string name="setting_label">Settings</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="detail_label">Details</string>
+    <string name="restore_app">Reset Everything</string>
+    <string name="qr_scan">QR Scan</string>
+    <string name="scan_result">This is Open Source Project. You can update edit or share as you want</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="loading_scan">Loading...</string>
+    <string name="result_lable">Scan Result</string>
+    <string name="qr_files">QR Files</string>
+</resources>

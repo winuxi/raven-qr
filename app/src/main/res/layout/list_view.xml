@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="4dp"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="50dp"
+                android:src="@drawable/ic_baseline_qr_code_2_24"
+                android:layout_height="50dp"/>
+            <TextView
+                android:id="@+id/title"
+                android:textStyle="bold"
+                android:paddingTop="3dp"
+                android:textSize="18dp"
+                android:layout_toEndOf="@id/icon"
+                android:layout_toStartOf="@id/qr_delete"
+                android:layout_width="wrap_content"
+                android:text="QR Title"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/info"
+                android:layout_toStartOf="@id/qr_delete"
+                android:textStyle="italic"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_toEndOf="@id/icon"
+                android:layout_below="@id/title"
+                android:layout_width="wrap_content"
+                android:text="QR description"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/qr_delete"
+                android:layout_width="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/qr_share"
+                android:src="@drawable/ic_baseline_delete_forever_24"
+                android:layout_height="30dp"/>
+            <ImageView
+                android:id="@+id/qr_share"
+                android:layout_width="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_baseline_share_24"
+                android:layout_height="30dp"/>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
