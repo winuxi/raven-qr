@@ -1,9 +1,15 @@
 package com.ravenioet.ravenqr.ui;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.content.Context.WINDOW_SERVICE;
+import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -26,23 +32,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.HybridBinarizer;
 import com.ravenioet.ravenqr.R;
 import com.ravenioet.ravenqr.adapters.FileAdapter;
 import com.ravenioet.ravenqr.databinding.HomeBinding;
 import com.ravenioet.ravenqr.databinding.ViewQrScannerBinding;
-import com.ravenioet.ravenqr.moels.FileQ;
+import com.ravenioet.ravenqr.moels.QRFile;
 import com.ravenioet.ravenqr.tools.AnimateView;
 import com.ravenioet.ravenqr.tools.WorkSpace;
 import com.ravenioet.ravenqr.view_models.FileViewModel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,17 +72,14 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import eu.livotov.labs.android.camview.ScannerLiveView;
 import eu.livotov.labs.android.camview.scanner.decoder.zxing.ZXDecoder;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static android.content.Context.WINDOW_SERVICE;
-import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-public class QRFiles extends Fragment {
+public class QRFileList extends Fragment {
 
     private HomeBinding binding;
-    public static List<FileQ> file_store = new ArrayList<>();
+    public static List<QRFile> file_store = new ArrayList<>();
     public static FileAdapter fileAdapter;
     View root;
     FileViewModel fileViewModel;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -85,8 +97,8 @@ public class QRFiles extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.fileLists.setAdapter(fileAdapter);
         load_flies(getContext());
-        fileAdapter.onItemClickListener(fileQ -> {
-            fileViewModel.setFileQMutableLiveData(fileQ);
+        fileAdapter.onItemClickListener(QRFile -> {
+            fileViewModel.setFileQMutableLiveData(QRFile);
             Navigation.findNavController(view).navigate(R.id.detail);
         });
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +113,14 @@ public class QRFiles extends Fragment {
                 scan_qr(view);
             }
         });
-
+        binding.btnFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, 111);
+            }
+        });
         // adding listener to the button
         binding.fabScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +156,7 @@ public class QRFiles extends Fragment {
         }
         if (files_ar != null) {
             files = new ArrayList<>(Arrays.asList(files_ar));
-            FileQ filew;
+            QRFile filew;
             for (File file : files) {
                 Date lastModified = new Date(file.lastModified());
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -159,7 +178,7 @@ public class QRFiles extends Fragment {
                     file_name = file.getName().split("\\.")[0];
                     file_ext = file.getName().split("\\.")[1];
                 }
-                filew = new FileQ(file_name, file_size, file_ext, formattedDateString, type);
+                filew = new QRFile(file_name, file_size, file_ext, formattedDateString, type);
                 Log.d("Files", "FileName:" + file.getName() +
                         ", size: " + file_size
                         + ", updated: " + formattedDateString);
@@ -416,7 +435,7 @@ public class QRFiles extends Fragment {
             values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
             Uri uri = getContext().getContentResolver().insert(EXTERNAL_CONTENT_URI, values);
 
-            Log.d("absolute",file.getAbsolutePath()+", uri: "+uri.toString());
+            Log.d("absolute", file.getAbsolutePath() + ", uri: " + uri.toString());
             try (OutputStream output = getActivity().getContentResolver().openOutputStream(uri)) {
                 //Bitmap bm = textureView.getBitmap();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
@@ -429,5 +448,45 @@ public class QRFiles extends Fragment {
         return true;
     }
 
+    public void readQRFromFile(@NonNull Intent data) {
+        Uri uri = data.getData();
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            int[] pixels = new int[width * height];
+            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+            bitmap.recycle();
 
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            MultiFormatReader reader = new MultiFormatReader();
+            try {
+                Result result = reader.decode(binaryBitmap);
+                fileViewModel.setScanResult(result.getText());
+                Navigation.findNavController(root).navigate(R.id.result);
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+                Log.d("filesr", e.toString());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("filesr", e.toString());
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 111:
+                if (data != null) {
+                    readQRFromFile(data);
+                } else {
+                    Log.d("filesr", "null data");
+                }
+        }
+    }
 }

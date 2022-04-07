@@ -7,18 +7,25 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import com.ravenioet.ravenqr.R;
-
+import com.ravenioet.ravenqr.databinding.SettingsBinding;
 public class AppSetting extends Fragment {
-
+    SettingsBinding binding;
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        binding = SettingsBinding.inflate(inflater,container,false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.settings, container, false);
+        binding.eBuuton.setText("Call");
+        binding.cButton.setText("Write Email");
+        binding.eBuuton.setOnClickListener(view -> {
+
+        });
+        binding.cButton.setOnClickListener(view -> {
+
+        });
+        return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

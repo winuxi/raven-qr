@@ -4,11 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="50dp"
-    tools:context=".ui.QRResult">
-    <TextView
-        android:id="@+id/scan_result"
-        android:layout_centerHorizontal="true"
+    tools:context=".ui.QRScanResult">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/loading_scan" />
+        android:orientation="vertical"
+        android:background="@drawable/box_bg"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/purple_500"
+            android:textColor="@color/white"
+            android:text="QR Data"
+            android:padding="5dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/scan_result"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_height="match_parent"
+            android:text="@string/loading_scan" />
+    </LinearLayout>
 </RelativeLayout>

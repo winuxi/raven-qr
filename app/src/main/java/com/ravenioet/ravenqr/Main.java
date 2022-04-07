@@ -1,8 +1,8 @@
 package com.ravenioet.ravenqr;
 
 import android.os.Bundle;
-
-import com.ravenioet.ravenqr.databinding.ActivityMainBinding;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -11,8 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import com.ravenioet.ravenqr.databinding.ActivityMainBinding;
 public class Main extends AppCompatActivity {
     ActivityMainBinding binding;
     public static NavController navController;

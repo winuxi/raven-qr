@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import com.ravenioet.ravenqr.moels.FileQ;
+import com.ravenioet.ravenqr.moels.QRFile;
 public class FileViewModel extends AndroidViewModel {
-    private final MutableLiveData<FileQ> fileQMutableLiveData;
+    private final MutableLiveData<QRFile> fileQMutableLiveData;
     private final MutableLiveData<String> scanResult;
     public FileViewModel(@NonNull Application application) {
         super(application);
@@ -15,12 +15,12 @@ public class FileViewModel extends AndroidViewModel {
         scanResult = new MutableLiveData<>();
     }
 
-    public FileQ getFileQMutableLiveData() {
+    public QRFile getFileQMutableLiveData() {
         return fileQMutableLiveData.getValue();
     }
 
-    public void setFileQMutableLiveData(FileQ fileQ) {
-        this.fileQMutableLiveData.setValue(fileQ);
+    public void setFileQMutableLiveData(QRFile QRFile) {
+        this.fileQMutableLiveData.setValue(QRFile);
     }
     public String getScanResult() {
         return scanResult.getValue();

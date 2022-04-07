@@ -17,14 +17,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ravenioet.ravenqr.R;
-import com.ravenioet.ravenqr.moels.FileQ;
+import com.ravenioet.ravenqr.moels.QRFile;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ContentHolder> {
-    private List<FileQ> files = new ArrayList<>();
+    private List<QRFile> files = new ArrayList<>();
     public Context context;
     public int request;
     public OnItemClickListener listener;
@@ -45,24 +45,23 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ContentHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ContentHolder holder, int position) {
-        FileQ fileQ = files.get(position);
+        QRFile QRFile = files.get(position);
 
-        String file_inf = "created: " + fileQ.getCreated_at() + ", size: " + fileQ.getFile_size() /*+ ",type: " + fileQ.getFile_ext()*/;
-        holder.file_name.setText(fileQ.getFile_name());
+        String file_inf = "created: " + QRFile.getCreated_at() + ", size: " + QRFile.getFile_size() /*+ ",type: " + fileQ.getFile_ext()*/;
+        holder.file_name.setText(QRFile.getFile_name());
         holder.file_inf.setText(file_inf);
-        String file_name = internal_storage(context)+"/"+fileQ.getFile_name()+"."+fileQ.getFile_ext();
+        String file_name = internal_storage(context)+"/"+ QRFile.getFile_name()+"."+ QRFile.getFile_ext();
         holder.qr_pic.setImageBitmap(load_image(file_name));
         holder.share_qr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                share_file(fileQ);
+                share_file(QRFile);
             }
         });
         holder.delete_qr.setOnClickListener(v -> {
-            if (delete_file(fileQ)) {
-                files.remove(fileQ);
+            if (delete_file(QRFile)) {
+                files.remove(QRFile);
                 Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
-                notifyDataSetChanged();
             } else {
                 Toast.makeText(context, "Not Deleted", Toast.LENGTH_LONG).show();
             }
@@ -85,12 +84,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ContentHolder>
         return externalStorageVolumes[0];
     }
 
-    public boolean delete_file(FileQ fileQ) {
-        File file = new File(internal_storage(context), fileQ.getFile_name() + "." + fileQ.getFile_ext());
+    public boolean delete_file(QRFile QRFile) {
+        File file = new File(internal_storage(context), QRFile.getFile_name() + "." + QRFile.getFile_ext());
         return file.delete();
     }
 
-    public void share_file(FileQ fileQ) {
+    public void share_file(QRFile QRFile) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, "RavenIOET Solicit");
@@ -105,7 +104,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ContentHolder>
         return files.size();
     }
 
-    public void setFiles(List<FileQ> files) {
+    public void setFiles(List<QRFile> files) {
         this.files = files;
         notifyDataSetChanged();
     }
@@ -131,7 +130,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ContentHolder>
     }
 
     public interface OnItemClickListener {
-        void onItemClick(FileQ fileQ);
+        void onItemClick(QRFile QRFile);
     }
 
     public void onItemClickListener(OnItemClickListener listener) {

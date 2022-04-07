@@ -1,19 +1,17 @@
 package com.ravenioet.ravenqr.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ravenioet.ravenqr.R;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.ravenioet.ravenqr.databinding.QrResultBinding;
 import com.ravenioet.ravenqr.view_models.FileViewModel;
 
-public class QRResult extends Fragment {
+public class QRScanResult extends Fragment {
     QrResultBinding binding;
 
     private FileViewModel resultViewModel;

@@ -37,27 +37,36 @@
                 android:background="@color/black"
                 app:layout_collapseMode="pin"
                 android:id="@+id/img_det"
+                android:visibility="visible"
+                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:src="@mipmap/code_bg"
+                android:src="@mipmap/ic_launcher"
                 android:layout_height="match_parent"/>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_gravity="bottom"
                 app:layout_collapseMode="parallax"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_height="60dp">
+                android:layout_height="match_parent">
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:id="@+id/btn_create"
                     android:text="Generate QR"
-                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
                     android:layout_height="50dp"/>
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:id="@+id/btn_scan"
                     android:text="Scan QR"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_height="50dp"/>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_file"
+                    android:text="From File"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
                     android:layout_height="50dp"/>
 
             </RelativeLayout>
