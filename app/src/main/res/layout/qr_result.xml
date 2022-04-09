@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="50dp"
-    tools:context=".ui.QRScanResult">
+    tools:context=".ui.QrScanResult">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -19,10 +19,30 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/scan_result"
-            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:padding="10dp"
             android:layout_height="match_parent"
             android:text="@string/loading_scan" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_margin="5dp"
+            android:text="Share"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/saveScanned"
+            android:layout_margin="5dp"
+            android:text="Save"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 </RelativeLayout>

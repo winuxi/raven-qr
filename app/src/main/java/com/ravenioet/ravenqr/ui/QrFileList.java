@@ -6,7 +6,6 @@ import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,8 +49,9 @@ import com.ravenioet.ravenqr.R;
 import com.ravenioet.ravenqr.adapters.FileAdapter;
 import com.ravenioet.ravenqr.databinding.HomeBinding;
 import com.ravenioet.ravenqr.databinding.ViewQrScannerBinding;
-import com.ravenioet.ravenqr.moels.QRFile;
+import com.ravenioet.ravenqr.moels.QrFile;
 import com.ravenioet.ravenqr.tools.AnimateView;
+import com.ravenioet.ravenqr.tools.ReloadFiles;
 import com.ravenioet.ravenqr.tools.WorkSpace;
 import com.ravenioet.ravenqr.view_models.FileViewModel;
 
@@ -72,33 +72,33 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import eu.livotov.labs.android.camview.ScannerLiveView;
 import eu.livotov.labs.android.camview.scanner.decoder.zxing.ZXDecoder;
 
-public class QRFileList extends Fragment {
+public class QrFileList extends Fragment implements ReloadFiles {
 
     private HomeBinding binding;
-    public static List<QRFile> file_store = new ArrayList<>();
+    public static List<QrFile> file_store = new ArrayList<>();
     public static FileAdapter fileAdapter;
     View root;
     FileViewModel fileViewModel;
-
+    ReloadFiles reloadFiles;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         binding = HomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
-
+        reloadFiles = this;
         fileViewModel = new ViewModelProvider(requireActivity()).get(FileViewModel.class);
         binding.fileLists.setLayoutManager(new LinearLayoutManager(getContext()));
-        fileAdapter = new FileAdapter(getContext(), 1);
+        fileAdapter = new FileAdapter(getContext(), 1,this);
         return root;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.fileLists.setAdapter(fileAdapter);
-        load_flies(getContext());
-        fileAdapter.onItemClickListener(QRFile -> {
-            fileViewModel.setFileQMutableLiveData(QRFile);
+        load_flies();
+        fileAdapter.onItemClickListener(QrFile -> {
+            fileViewModel.setFileQMutableLiveData(QrFile);
             Navigation.findNavController(view).navigate(R.id.detail);
         });
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +142,9 @@ public class QRFileList extends Fragment {
 
     }
 
-    public static void load_flies(Context context) {
+    public void load_flies() {
         file_store.clear();
-        String path = WorkSpace.getSpace(context).getCurrentDir().toString();
+        String path = WorkSpace.getSpace(getContext()).getCurrentDir().toString();
         Log.d("current at:", path);
         File directory = new File(path);
         File[] files_ar = directory.listFiles(File::isFile);
@@ -156,13 +156,13 @@ public class QRFileList extends Fragment {
         }
         if (files_ar != null) {
             files = new ArrayList<>(Arrays.asList(files_ar));
-            QRFile filew;
+            QrFile filew;
             for (File file : files) {
                 Date lastModified = new Date(file.lastModified());
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String formattedDateString = formatter.format(lastModified);
-                String file_size = Formatter.formatShortFileSize(context, file.length());
+                String file_size = Formatter.formatShortFileSize(getContext(), file.length());
                 String file_name = file.getName();
                 String file_ext = "Unknown";
                 boolean type = file.isDirectory();
@@ -178,7 +178,7 @@ public class QRFileList extends Fragment {
                     file_name = file.getName().split("\\.")[0];
                     file_ext = file.getName().split("\\.")[1];
                 }
-                filew = new QRFile(file_name, file_size, file_ext, formattedDateString, type);
+                filew = new QrFile(file_name, file_size, file_ext, formattedDateString, type);
                 Log.d("Files", "FileName:" + file.getName() +
                         ", size: " + file_size
                         + ", updated: " + formattedDateString);
@@ -230,6 +230,7 @@ public class QRFileList extends Fragment {
                 scannerBinding.camview.stopScanner();
                 dialog.dismiss();
                 fileViewModel.setScanResult(data);
+                fileViewModel.setReloadFiles(reloadFiles);
                 Navigation.findNavController(view).navigate(R.id.result);
                 scannerBinding.qrMessage.setText(data);
             }
@@ -439,7 +440,7 @@ public class QRFileList extends Fragment {
             try (OutputStream output = getActivity().getContentResolver().openOutputStream(uri)) {
                 //Bitmap bm = textureView.getBitmap();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
-                load_flies(getContext());
+                load_flies();
             }
         } catch (Exception e) {
             Log.d("onBtnSavePng", e.toString()); // java.io.IOException: Operation not permitted
@@ -488,5 +489,10 @@ public class QRFileList extends Fragment {
                     Log.d("filesr", "null data");
                 }
         }
+    }
+
+    @Override
+    public void reloadFiles() {
+        load_flies();
     }
 }

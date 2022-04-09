@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/qr_files"
-        android:name="com.ravenioet.ravenqr.ui.QRFileList"
+        android:name="com.ravenioet.ravenqr.ui.QrFileList"
         android:label="@string/home_label"
         tools:layout="@layout/home">
     </fragment>
@@ -19,13 +19,13 @@
     </fragment>
     <fragment
         android:id="@+id/detail"
-        android:name="com.ravenioet.ravenqr.ui.QRDetail"
+        android:name="com.ravenioet.ravenqr.ui.QrDetail"
         android:label="@string/detail_label"
         tools:layout="@layout/detail_fragment">
     </fragment>
     <fragment
         android:id="@+id/result"
-        android:name="com.ravenioet.ravenqr.ui.QRScanResult"
+        android:name="com.ravenioet.ravenqr.ui.QrScanResult"
         android:label="@string/result_lable"
         tools:layout="@layout/detail_fragment">
     </fragment>

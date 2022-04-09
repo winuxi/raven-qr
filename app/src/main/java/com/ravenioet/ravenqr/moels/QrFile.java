@@ -1,13 +1,13 @@
 package com.ravenioet.ravenqr.moels;
 
-public class QRFile {
+public class QrFile {
     String file_name;
     String file_size;
     String file_ext;
     String created_at;
     boolean directory;
 
-    public QRFile(String file_name, String file_size, String file_ext, String created_at, boolean directory) {
+    public QrFile(String file_name, String file_size, String file_ext, String created_at, boolean directory) {
         this.file_name = file_name;
         this.file_size = file_size;
         this.file_ext = file_ext;

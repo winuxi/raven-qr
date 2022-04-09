@@ -23,12 +23,12 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.ravenioet.ravenqr.R;
 import com.ravenioet.ravenqr.databinding.DetailFragmentBinding;
-import com.ravenioet.ravenqr.moels.QRFile;
+import com.ravenioet.ravenqr.moels.QrFile;
 import com.ravenioet.ravenqr.view_models.FileViewModel;
 
 import java.io.File;
 
-public class QRDetail extends Fragment {
+public class QrDetail extends Fragment {
 
     private FileViewModel fileViewModel;
     DetailFragmentBinding binding;
@@ -45,7 +45,7 @@ public class QRDetail extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fileViewModel = new ViewModelProvider(requireActivity()).get(FileViewModel.class);
-        QRFile QRFile = fileViewModel.getFileQMutableLiveData();
+        QrFile QRFile = fileViewModel.getFileQMutableLiveData();
         binding.qrTitle.setText(QRFile.getFile_name());
         binding.secStatus.setText("Security Status");
         binding.secValue.setText("Not Secured");

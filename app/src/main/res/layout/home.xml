@@ -34,13 +34,12 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <ImageView
-                android:background="@color/black"
+                android:background="@color/purple_700"
                 app:layout_collapseMode="pin"
                 android:id="@+id/img_det"
                 android:visibility="visible"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:src="@mipmap/ic_launcher"
                 android:layout_height="match_parent"/>
             <RelativeLayout
                 android:layout_width="match_parent"
