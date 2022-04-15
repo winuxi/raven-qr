@@ -1,18 +1,5 @@
 package com.ravenioet.ravenqr.tools;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.ravenioet.ravenqr.R;
-import com.ravenioet.ravenqr.Main;
-
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.CAMERA;
@@ -21,6 +8,20 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.ravenioet.ravenqr.Main;
+import com.ravenioet.ravenqr.R;
+
 public class Boot extends AppCompatActivity {
 
     private static final int RequestPermissionCode = 1;
@@ -28,6 +29,8 @@ public class Boot extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode
+                (AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_boot);
         checkPermissions();
 

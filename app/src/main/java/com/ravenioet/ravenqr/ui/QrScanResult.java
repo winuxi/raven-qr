@@ -146,6 +146,7 @@ public class QrScanResult extends Fragment {
     }
     void prepareFile(){
 
+
     }
 
     public boolean save_qr(Bitmap bitmap, String file_name) {

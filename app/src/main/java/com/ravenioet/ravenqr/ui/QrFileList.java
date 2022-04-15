@@ -4,6 +4,8 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
 import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
+import static com.ravenioet.ravenqr.Main.navOption;
+
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -50,7 +52,6 @@ import com.ravenioet.ravenqr.adapters.FileAdapter;
 import com.ravenioet.ravenqr.databinding.HomeBinding;
 import com.ravenioet.ravenqr.databinding.ViewQrScannerBinding;
 import com.ravenioet.ravenqr.moels.QrFile;
-import com.ravenioet.ravenqr.tools.AnimateView;
 import com.ravenioet.ravenqr.tools.ReloadFiles;
 import com.ravenioet.ravenqr.tools.WorkSpace;
 import com.ravenioet.ravenqr.view_models.FileViewModel;
@@ -99,7 +100,7 @@ public class QrFileList extends Fragment implements ReloadFiles {
         load_flies();
         fileAdapter.onItemClickListener(QrFile -> {
             fileViewModel.setFileQMutableLiveData(QrFile);
-            Navigation.findNavController(view).navigate(R.id.detail);
+            Navigation.findNavController(view).navigate(R.id.detail,null,navOption());
         });
         binding.btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
